@@ -2,7 +2,7 @@
 Just another app to make windows applications screenshot and screenshare protected
 
 #### Core
-This app is simple background service which pInvokes `SetWindowDisplayAffinity` to protect the selected apps from screen capture apps
+WindowDRM app is simple background service application which pInvokes `SetWindowDisplayAffinity` to protect the selected apps from screen capture apps
 
 > const uint WDA_MONITOR = 1;<br/>
 > SetWindowDisplayAffinity(this.Handle, WDA_MONITOR);
