@@ -25,16 +25,23 @@ namespace WindowDRM
         }
         public bool Check()
         {
-            if (rkApp.GetValue("PropTaxApp") == null)
+            try
             {
-                // The value doesn't exist, the application is not set to run at startup
-                return false;
-            }
+                if (rkApp.GetValue("PropTaxApp") == null)
+                {
+                    // The value doesn't exist, the application is not set to run at startup
+                    return false;
+                }
 
-            else
+                else
+                {
+                    // The value exists, the application is set to run at startup
+                    return true;
+                }
+            }
+            catch (System.Exception ex)
             {
-                // The value exists, the application is set to run at startup
-                return true;
+                return false;
             }
         }
     }

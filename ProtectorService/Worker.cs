@@ -1,49 +1,28 @@
-﻿using WindowDRM.BL;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using WindowDRM.BL;
 
-namespace WindowDRM
+namespace ProtectorService
 {
-    public partial class frmMain : Form
+    public class Worker : BackgroundService
     {
-        bool runInBg = true;
-        public frmMain()
+        private readonly ILogger<Worker> _logger;
+
+        public Worker(ILogger<Worker> logger)
         {
-            InitializeComponent();
-            mnExit.Click += MnExit_Click;
-            mnSettings.Click += MnSettings_Click;
-            ntfTray.DoubleClick += MnSettings_Click; ;
+            _logger = logger;
         }
 
-        private void MnSettings_Click(object sender, EventArgs e)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            this.WindowState = FormWindowState.Normal;
-        }
-
-        private void MnExit_Click(object sender, EventArgs e)
-        {
-            runInBg = false;
-            this.Close();
-        }
-
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            runInBg = true;
-            this.Close();
-        }
-
-        private void frmMain_Load(object sender, EventArgs e)
-        {
-
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                if (_logger.IsEnabled(LogLevel.Information))
+                {
+                    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                }
+                await Task.Delay(1000, stoppingToken);
+            }
         }
 
         #region pInvoke
@@ -77,11 +56,5 @@ namespace WindowDRM
             }
         }
         #endregion
-
-        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-            e.Cancel = runInBg;
-        }
     }
 }

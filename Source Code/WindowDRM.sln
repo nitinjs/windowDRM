@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31129.286
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowDRM", "WindowDRM.csproj", "{FB756223-FA5E-4630-AEB3-AE035BE4A731}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtectorService", "..\ProtectorService\ProtectorService.csproj", "{B1699AE7-2FAD-428F-B22F-CB2C6D7780C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{FB756223-FA5E-4630-AEB3-AE035BE4A731}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB756223-FA5E-4630-AEB3-AE035BE4A731}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB756223-FA5E-4630-AEB3-AE035BE4A731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1699AE7-2FAD-428F-B22F-CB2C6D7780C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1699AE7-2FAD-428F-B22F-CB2C6D7780C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1699AE7-2FAD-428F-B22F-CB2C6D7780C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1699AE7-2FAD-428F-B22F-CB2C6D7780C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
