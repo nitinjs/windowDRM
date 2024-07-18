@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using WindowDRM.BL;
+using System.Text;
 
 namespace ProtectorService
 {
@@ -17,6 +18,31 @@ namespace ProtectorService
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                var collection = new Dictionary<nint, string>();
+                EnumDesktopWindowsDelegate filter = delegate (IntPtr hWnd, int lParam)
+                {
+                    StringBuilder strbTitle = new StringBuilder(255);
+                    int nLength = Worker.GetWindowText(hWnd, strbTitle, strbTitle.Capacity + 1);
+                    string strTitle = strbTitle.ToString();
+
+                    if (Worker.IsWindowVisible(hWnd) && string.IsNullOrEmpty(strTitle) == false)
+                    {
+                        collection.Add(hWnd, strTitle);
+                    }
+                    return true;
+                };
+
+                if (Worker.EnumDesktopWindows(IntPtr.Zero, filter, IntPtr.Zero))
+                {
+                    //const uint WDA_NONE = 0;
+                    const uint WDA_MONITOR = 1;
+                    foreach (var item in collection)
+                    {
+                        SetWindowDisplayAffinity(item.Key, WDA_MONITOR);
+                        //Console.WriteLine(item);
+                    }
+                }
+
                 if (_logger.IsEnabled(LogLevel.Information))
                 {
                     _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
@@ -26,6 +52,18 @@ namespace ProtectorService
         }
 
         #region pInvoke
+        //http://pinvoke.net/default.aspx/user32.EnumDesktopWindows
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsWindowVisible(IntPtr hWnd);
+
+        [DllImport("user32.dll", EntryPoint = "GetWindowText", ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpWindowText, int nMaxCount);
+
+        public delegate bool EnumDelegate(IntPtr hWnd, int lParam);
+        private delegate bool EnumDesktopWindowsDelegate(IntPtr hWnd, int lParam);
+        [DllImport("user32.dll")]
+        static extern bool EnumDesktopWindows(IntPtr hDesktop, EnumDesktopWindowsDelegate lpfn, IntPtr lParam);
 
         [DllImport("user32.dll")]
         static extern uint SetWindowDisplayAffinity(IntPtr hwnd, uint dwAffinity);
